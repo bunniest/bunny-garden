@@ -19,34 +19,59 @@
       --border:   #c4d6e8;
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: var(--bg); color: var(--dark); font-family: 'Courier Prime', 'Courier New', monospace; font-size: 15px; line-height: 1.8; }
-    .page { max-width: 640px; margin: 0 auto; padding: 0 1.5rem; }
-    a { color: var(--slate); text-underline-offset: 2px; }
+    body {
+      background: var(--bg);
+      color: var(--dark);
+      font-family: 'Courier Prime', 'Courier New', monospace;
+      font-size: 17px;
+      line-height: 1.8;
+    }
+    .page { max-width: 680px; margin: 0 auto; padding: 0 1.75rem; }
+    a { color: var(--slate); text-underline-offset: 3px; }
     a:hover { color: var(--dark); }
-    header { padding: 2.75rem 0 1.375rem; }
-    .site-title { font-family: 'VT323', monospace; font-size: 2.625rem; color: var(--dark); letter-spacing: 0.04em; line-height: 1; }
+    header { padding: 2.75rem 0 1.5rem; }
+    .site-title {
+      font-family: 'VT323', monospace;
+      font-size: 3rem;
+      color: var(--dark);
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
     .site-title a { text-decoration: none; color: inherit; }
     .dot { color: var(--purple); }
-    nav { margin-top: 0.625rem; display: flex; flex-wrap: wrap; column-gap: 1.25rem; }
-    nav a { font-size: 0.875rem; color: var(--muted); text-decoration: none; }
+    nav { margin-top: 0.75rem; display: flex; flex-wrap: wrap; column-gap: 1.375rem; }
+    nav a { font-size: 0.9375rem; color: var(--muted); text-decoration: none; }
     nav a:hover { color: var(--dark); text-decoration: underline; }
     nav a.active { color: var(--slate); text-decoration: underline; }
     .rule { border: none; border-top: 1px dashed var(--border); margin: 0; }
-    .section { padding: 1.75rem 0; }
-    .section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
-    .section-label { font-family: 'VT323', monospace; font-size: 1.375rem; color: var(--slate); letter-spacing: 0.04em; }
+    .section { padding: 1.875rem 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.125rem; }
+    .section-label {
+      font-family: 'VT323', monospace;
+      font-size: 1.5rem;
+      color: var(--slate);
+      letter-spacing: 0.04em;
+    }
     .section-label::before { content: '> '; color: var(--purple); }
-    .section-more { font-size: 0.8125rem; color: var(--muted); text-decoration: none; }
+    .section-more { font-size: 0.875rem; color: var(--muted); text-decoration: none; }
     .section-more:hover { color: var(--slate); }
-    footer { padding: 1.75rem 0 3.5rem; font-size: 0.8125rem; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    footer {
+      padding: 1.875rem 0 3.5rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
     .footer-links { display: flex; gap: 1rem; }
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--dark); }
 
-    /* ── override the embed's default styles to match our theme ─── */
+    /* ── embed overrides ──────────────────────────────────────────── */
     #letterboxd-embed-wrapper-tc {
       font-family: 'Courier Prime', 'Courier New', monospace !important;
-      font-size: 15px !important;
+      font-size: 17px !important;
       color: var(--dark) !important;
       background: transparent !important;
     }
@@ -55,13 +80,8 @@
       border-radius: 0 !important;
       box-shadow: none !important;
     }
-    /* entries list */
     #letterboxd-embed-wrapper-tc ul,
-    #letterboxd-embed-wrapper-tc ol {
-      list-style: none !important;
-      padding: 0 !important;
-      margin: 0 !important;
-    }
+    #letterboxd-embed-wrapper-tc ol { list-style: none !important; padding: 0 !important; margin: 0 !important; }
     #letterboxd-embed-wrapper-tc li {
       display: flex !important;
       gap: 0.875rem !important;
@@ -70,57 +90,58 @@
       border-top: none !important;
       background: transparent !important;
     }
-    #letterboxd-embed-wrapper-tc li:last-child {
-      border-bottom: none !important;
-    }
-    /* poster images */
+    #letterboxd-embed-wrapper-tc li:last-child { border-bottom: none !important; }
     #letterboxd-embed-wrapper-tc img {
-      width: 46px !important;
+      width: 52px !important;
       height: auto !important;
       display: block !important;
       border: 1px solid var(--border) !important;
       flex-shrink: 0 !important;
     }
-    /* film titles */
     #letterboxd-embed-wrapper-tc a {
       color: var(--dark) !important;
       text-decoration: none !important;
       font-weight: 700 !important;
     }
-    #letterboxd-embed-wrapper-tc a:hover {
-      color: var(--slate) !important;
-      text-decoration: underline !important;
-    }
-    /* star ratings */
-    #letterboxd-embed-wrapper-tc .rating,
+    #letterboxd-embed-wrapper-tc a:hover { color: var(--slate) !important; text-decoration: underline !important; }
     #letterboxd-embed-wrapper-tc [class*="star"],
     #letterboxd-embed-wrapper-tc [class*="rating"] {
       color: var(--purple) !important;
       background: transparent !important;
-      font-size: 1rem !important;
     }
-    /* dates / meta text */
+    /* reviews — show as small italic muted text, cap at 3 lines */
+    #letterboxd-embed-wrapper-tc p {
+      font-size: 0.875rem !important;
+      font-style: italic !important;
+      color: var(--muted) !important;
+      font-weight: 400 !important;
+      margin-top: 0.3rem !important;
+      line-height: 1.55 !important;
+      display: -webkit-box !important;
+      -webkit-line-clamp: 3 !important;
+      -webkit-box-orient: vertical !important;
+      overflow: hidden !important;
+    }
     #letterboxd-embed-wrapper-tc time,
-    #letterboxd-embed-wrapper-tc .date,
     #letterboxd-embed-wrapper-tc [class*="date"],
     #letterboxd-embed-wrapper-tc small {
-      font-size: 0.8125rem !important;
+      font-size: 0.875rem !important;
       color: var(--muted) !important;
+      font-weight: 400 !important;
     }
-    /* hide any branding/footer the embed adds */
+    /* hide any branding the embed appends */
     #letterboxd-embed-wrapper-tc [class*="footer"],
     #letterboxd-embed-wrapper-tc [class*="brand"],
-    #letterboxd-embed-wrapper-tc [class*="powered"] {
-      display: none !important;
-    }
+    #letterboxd-embed-wrapper-tc [class*="powered"] { display: none !important; }
 
-    #lb-status { font-size: 0.9rem; color: var(--muted); padding: 0.25rem 0 0.75rem; }
+    #lb-status { font-size: 1rem; color: var(--muted); padding: 0.25rem 0 0.75rem; }
 
-    @media (max-width: 480px) { .site-title { font-size: 2rem; } }
+    @media (max-width: 500px) { .site-title { font-size: 2.25rem; } }
   </style>
 </head>
 <body>
   <div class="page">
+
     <header>
       <div class="site-title"><a href="index.html">bunny garden<span class="dot">.</span></a></div>
       <nav>
@@ -149,15 +170,16 @@
 
     <footer>
       <div class="footer-links">
-        <a href="/cdn-cgi/l/email-protection#dda4b2a89db8b0bcb4b1f3beb2b0">contact</a>
+        <a href="mailto:you@email.com">contact</a>
         <a href="guestbook.html">guestbook</a>
         <a href="feed.xml">rss</a>
       </div>
       <span>made with &#9825;</span>
     </footer>
+
   </div>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script>
     var LB_USER  = 'manipulative';
     var statusEl = document.getElementById('lb-status');
     var wrapEl   = document.getElementById('letterboxd-embed-wrapper-tc');
@@ -171,7 +193,7 @@
         if (!html || html.trim().length < 10) throw new Error('empty response');
         statusEl.style.display = 'none';
         wrapEl.innerHTML = html;
-        // Letterboxd's CDN blocks images without this
+        // fix letterboxd CDN hotlink protection
         wrapEl.querySelectorAll('img').forEach(function(img) {
           img.setAttribute('referrerpolicy', 'no-referrer');
           var src = img.src;
@@ -183,4 +205,8 @@
         console.warn('[bunny garden] embed error:', err.message);
         statusEl.innerHTML =
           "couldn't load right now \u2014 " +
-          "<a href='https://le
+          "<a href='https://letterboxd.com/" + LB_USER + "/films/diary/' target='_blank' rel='noopener'>view on letterboxd &rarr;</a>";
+      });
+  </script>
+</body>
+</html>
