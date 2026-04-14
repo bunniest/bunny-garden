@@ -101,8 +101,10 @@
       statusEl.style.display = 'none';
       wrapEl.innerHTML = html.replace(/★/g, carrot);
       wrapEl.querySelectorAll('img').forEach(function(img) {
-        img.setAttribute('referrerpolicy', 'no-referrer');
-        var src = img.src; img.src = ''; img.src = src;
+        if (img.src.indexOf('ltrbxd') !== -1 || img.src.indexOf('letterboxd') !== -1) {
+          img.setAttribute('referrerpolicy', 'no-referrer');
+          var src = img.src; img.src = ''; img.src = src;
+        }
       });
     }
 
