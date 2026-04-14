@@ -19,13 +19,7 @@
       --border:   #c4d6e8;
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: var(--bg);
-      color: var(--dark);
-      font-family: 'Courier Prime', 'Courier New', monospace;
-      font-size: 15px;
-      line-height: 1.8;
-    }
+    body { background: var(--bg); color: var(--dark); font-family: 'Courier Prime', 'Courier New', monospace; font-size: 15px; line-height: 1.8; }
     .page { max-width: 640px; margin: 0 auto; padding: 0 1.5rem; }
     a { color: var(--slate); text-underline-offset: 2px; }
     a:hover { color: var(--dark); }
@@ -48,8 +42,6 @@
     .footer-links { display: flex; gap: 1rem; }
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--dark); }
-
-    /* diary */
     .film-entry { display: flex; gap: 0.875rem; padding: 0.875rem 0; border-bottom: 1px dotted var(--border); }
     .film-entry:last-child { border-bottom: none; }
     .film-poster { flex-shrink: 0; width: 46px; }
@@ -62,17 +54,14 @@
     .film-rating { color: var(--purple); font-size: 1rem; margin-top: 0.1rem; }
     .film-date { font-size: 0.8125rem; color: var(--muted); }
     .film-review { font-size: 0.875rem; font-style: italic; margin-top: 0.2rem; }
-
     #diary-status { font-size: 0.9rem; color: var(--muted); padding: 0.25rem 0 0.75rem; }
     #btn-more { margin-top: 1rem; font-family: 'Courier Prime', monospace; font-size: 0.875rem; color: var(--slate); background: transparent; border: 1px solid var(--border); padding: 0.25rem 0.875rem; cursor: pointer; display: none; }
     #btn-more:hover { background: var(--blue-dim); color: var(--dark); }
-
     @media (max-width: 480px) { .site-title { font-size: 2rem; } }
   </style>
 </head>
 <body>
   <div class="page">
-
     <header>
       <div class="site-title"><a href="index.html">bunny garden<span class="dot">.</span></a></div>
       <nav>
@@ -108,53 +97,35 @@
       </div>
       <span>made with &#9825;</span>
     </footer>
-
   </div>
+
   <script>
-    var LB_USER   = 'manipulative';
-    var BATCH     = 10;
-    var FEED      = 'https://letterboxd.com/' + LB_USER + '/rss/';
-    var PROXY     = 'https://api.allorigins.win/get?url=' + encodeURIComponent(FEED);
+    var LB_USER = 'manipulative';
+    var BATCH   = 10;
+    var API_URL = 'https://api.rss2json.com/v1/api.json?rss_url='
+                + encodeURIComponent('https://letterboxd.com/' + LB_USER + '/rss/');
 
     var allEntries = [];
     var shown = 0;
 
-    // safely get text from a tag, trying multiple approaches
-    function getText(parent, tagName) {
-      // try with letterboxd namespace
-      var ns = parent.getElementsByTagNameNS('https://letterboxd.com', tagName);
-      if (ns.length) return ns[0].textContent.trim();
-      // try prefixed
-      var pre = parent.getElementsByTagName('letterboxd:' + tagName);
-      if (pre.length) return pre[0].textContent.trim();
-      // try plain
-      var plain = parent.getElementsByTagName(tagName);
-      if (plain.length) return plain[0].textContent.trim();
-      return '';
+    // rss2json gives us the title as e.g. "The Shining, 1980 - ★★★★½"
+    function parseTitle(raw) {
+      var m = raw.match(/^(.+?),\s*(\d{4})(?:\s*-\s*(.+))?$/);
+      if (m) return { name: m[1].trim(), year: m[2], stars: m[3] ? m[3].trim() : '' };
+      return { name: raw, year: '', stars: '' };
     }
 
-    function toStars(r) {
-      var n = parseFloat(r);
-      if (!r || isNaN(n) || n <= 0) return '';
-      var s = '';
-      for (var i = 0; i < Math.floor(n); i++) s += '\u2605';
-      if (n % 1 >= 0.5) s += '\u00BD';
-      return s;
-    }
-
+    // pubDate from rss2json is "2026-04-08 00:00:00"
     function fmtDate(s) {
       if (!s) return '';
-      var parts = s.split('-');
-      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      return parseInt(parts[2], 10) + ' ' + months[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
+      var d = new Date(s.replace(' ', 'T'));
+      var mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return d.getDate() + ' ' + mo[d.getMonth()] + ' ' + d.getFullYear();
     }
 
-    function getPoster(html) {
-      var m = html.match(/src="([^"]+)"/);
-      return m ? m[1] : null;
-    }
-
+    // strip HTML and cap length for review snippets
     function getReview(html) {
+      if (!html) return '';
       var t = html
         .replace(/<img[^>]*>/gi, '')
         .replace(/<p>\s*Watched[^<]*<\/p>/gi, '')
@@ -167,23 +138,18 @@
     function makeCard(e) {
       var div = document.createElement('div');
       div.className = 'film-entry';
-
       var poster = e.poster
         ? '<img src="' + e.poster + '" alt="" loading="lazy">'
         : '<div class="film-poster-empty">no<br>img</div>';
-
       div.innerHTML =
         '<div class="film-poster"><a href="' + e.link + '" target="_blank" rel="noopener">' + poster + '</a></div>' +
         '<div class="film-info">' +
-          '<div>' +
-            '<a class="film-title" href="' + e.link + '" target="_blank" rel="noopener">' + e.title + '</a>' +
-            (e.year ? ' <span class="film-year">(' + e.year + ')</span>' : '') +
-          '</div>' +
-          (e.stars ? '<div class="film-rating">' + e.stars + '</div>' : '') +
-          (e.date  ? '<div class="film-date">watched ' + e.date + '</div>' : '') +
+          '<div><a class="film-title" href="' + e.link + '" target="_blank" rel="noopener">' + e.name + '</a>' +
+          (e.year ? ' <span class="film-year">(' + e.year + ')</span>' : '') + '</div>' +
+          (e.stars  ? '<div class="film-rating">' + e.stars + '</div>' : '') +
+          (e.date   ? '<div class="film-date">watched ' + e.date + '</div>' : '') +
           (e.review ? '<div class="film-review">' + e.review + '</div>' : '') +
         '</div>';
-
       return div;
     }
 
@@ -198,50 +164,34 @@
 
     function load() {
       var statusEl = document.getElementById('diary-status');
-
-      fetch(PROXY)
+      fetch(API_URL)
         .then(function(res) {
-          if (!res.ok) throw new Error('proxy returned ' + res.status);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
           return res.json();
         })
-        .then(function(json) {
-          if (!json || !json.contents) throw new Error('proxy returned empty contents');
+        .then(function(data) {
+          if (data.status !== 'ok') throw new Error('rss2json: ' + (data.message || data.status));
+          var items = data.items || [];
+          if (!items.length) throw new Error('feed returned 0 items');
 
-          var xmlText = json.contents;
-          var parser  = new DOMParser();
-          var doc     = parser.parseFromString(xmlText, 'text/xml');
-
-          // DOMParser doesn't throw — check for a parsererror element
-          var errEl = doc.getElementsByTagName('parsererror');
-          if (errEl.length > 0) throw new Error('XML parse error: ' + errEl[0].textContent.slice(0, 120));
-
-          // getElementsByTagName works reliably on XML documents
-          var items = doc.getElementsByTagName('item');
-          if (!items.length) throw new Error('feed parsed ok but contained 0 items');
-
-          for (var i = 0; i < items.length; i++) {
-            var item = items[i];
-            var desc = getText(item, 'description');
-            // <link> in RSS 2.0 is a text node; nextSibling trick avoids HTML <link> confusion
-            var linkEl   = item.getElementsByTagName('link')[0];
-            var linkHref = linkEl ? (linkEl.textContent || linkEl.getAttribute('href') || '#').trim() : '#';
-
+          items.forEach(function(item) {
+            var parsed = parseTitle(item.title || '');
             allEntries.push({
-              title:  getText(item, 'filmTitle') || getText(item, 'title').split(',')[0],
-              year:   getText(item, 'filmYear'),
-              stars:  toStars(getText(item, 'memberRating')),
-              date:   fmtDate(getText(item, 'watchedDate')),
-              link:   linkHref,
-              poster: getPoster(desc),
-              review: getReview(desc),
+              name:   parsed.name,
+              year:   parsed.year,
+              stars:  parsed.stars,
+              date:   fmtDate(item.pubDate),
+              link:   item.link || '#',
+              poster: item.thumbnail || null,
+              review: getReview(item.description),
             });
-          }
+          });
 
           statusEl.style.display = 'none';
           showBatch();
         })
         .catch(function(err) {
-          console.error('[bunny garden] letterboxd error:', err.message);
+          console.error('[bunny garden] films error:', err.message);
           statusEl.innerHTML =
             "couldn't load right now \u2014 " +
             "<a href='https://letterboxd.com/" + LB_USER + "/films/diary/' target='_blank' rel='noopener'>view on letterboxd &rarr;</a>";
