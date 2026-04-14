@@ -149,7 +149,7 @@
 
     <footer>
       <div class="footer-links">
-        <a href="mailto:you@email.com">contact</a>
+        <a href="/cdn-cgi/l/email-protection#dda4b2a89db8b0bcb4b1f3beb2b0">contact</a>
         <a href="guestbook.html">guestbook</a>
         <a href="feed.xml">rss</a>
       </div>
@@ -157,7 +157,7 @@
     </footer>
   </div>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     var LB_USER  = 'manipulative';
     var statusEl = document.getElementById('lb-status');
     var wrapEl   = document.getElementById('letterboxd-embed-wrapper-tc');
@@ -171,13 +171,16 @@
         if (!html || html.trim().length < 10) throw new Error('empty response');
         statusEl.style.display = 'none';
         wrapEl.innerHTML = html;
+        // Letterboxd's CDN blocks images without this
+        wrapEl.querySelectorAll('img').forEach(function(img) {
+          img.setAttribute('referrerpolicy', 'no-referrer');
+          var src = img.src;
+          img.src = '';
+          img.src = src;
+        });
       })
       .catch(function(err) {
         console.warn('[bunny garden] embed error:', err.message);
         statusEl.innerHTML =
           "couldn't load right now \u2014 " +
-          "<a href='https://letterboxd.com/" + LB_USER + "/films/diary/' target='_blank' rel='noopener'>view on letterboxd &rarr;</a>";
-      });
-  </script>
-</body>
-</html>
+          "<a href='https://le
