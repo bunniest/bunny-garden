@@ -44,10 +44,15 @@
     footer a:hover { color: var(--dark); }
     #letterboxd-embed-wrapper-tc { font-family: 'Courier Prime', 'Courier New', monospace !important; font-size: 17px !important; color: var(--dark) !important; background: transparent !important; }
     #letterboxd-embed-wrapper-tc * { font-family: 'Courier Prime', 'Courier New', monospace !important; border-radius: 0 !important; box-shadow: none !important; }
-    #letterboxd-embed-wrapper-tc ul, #letterboxd-embed-wrapper-tc ol { list-style: none !important; padding: 0 !important; margin: 0 !important; }
-    #letterboxd-embed-wrapper-tc li { display: flex !important; gap: 0.875rem !important; padding: 0.875rem 0 !important; border-bottom: 1px dotted var(--border) !important; border-top: none !important; background: transparent !important; }
-    #letterboxd-embed-wrapper-tc li:last-child { border-bottom: none !important; }
-    #letterboxd-embed-wrapper-tc img { width: 52px !important; height: auto !important; display: block !important; border: 1px solid var(--border) !important; flex-shrink: 0 !important; }
+    #letterboxd-embed-wrapper-tc .letterboxd-embed-tc-diary-entry { background: transparent !important; border-radius: 0 !important; }
+    #letterboxd-embed-wrapper-tc .letterboxd-embed-tc-divider { border-bottom: 1px dotted var(--border) !important; border-color: var(--border) !important; }
+    #letterboxd-embed-wrapper-tc .letterboxd-embed-tc-title { color: var(--dark) !important; font-size: 1rem !important; }
+    #letterboxd-embed-wrapper-tc .letterboxd-embed-tc-year { color: var(--muted) !important; }
+    #letterboxd-embed-wrapper-tc .letterboxd-embed-tc-date { color: var(--muted) !important; font-size: 0.875rem !important; }
+    #letterboxd-embed-wrapper-tc .letterboxd-embed-tc-rating { color: var(--purple) !important; font-size: 1rem !important; }
+    #letterboxd-embed-wrapper-tc .letterboxd-embed-tc-footer { display: none !important; }
+    #letterboxd-embed-wrapper-tc .letterboxd-embed-tc-poster img { width: 52px !important; height: auto !important; display: block !important; border: 1px solid var(--border) !important; flex-shrink: 0 !important; }
+    #letterboxd-embed-wrapper-tc .letterboxd-embed-tc-rating img { width: 16px !important; height: 16px !important; border: none !important; display: inline-block !important; }
     #letterboxd-embed-wrapper-tc a { color: var(--dark) !important; text-decoration: none !important; font-weight: 700 !important; }
     #letterboxd-embed-wrapper-tc a:hover { color: var(--slate) !important; text-decoration: underline !important; }
     #letterboxd-embed-wrapper-tc [class*="star"], #letterboxd-embed-wrapper-tc [class*="rating"] { color: var(--purple) !important; background: transparent !important; }
